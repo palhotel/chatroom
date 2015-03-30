@@ -1,0 +1,17 @@
+{
+	"name": "PalChatRoom",
+	"description": "Chatroom based on nodejs and angularjs",
+	"version": "0.0.1",
+	"keywords":["chatroom", "angularjs"],
+	"devDependencies": {
+		"express": ">3.0.0"
+	},
+	"engines": {
+		"node": ">= 0.10.0"
+	},
+	"maintainers":[{
+		"name": "Da",
+		"email": "you@likeada.com"
+	}]
+
+}
