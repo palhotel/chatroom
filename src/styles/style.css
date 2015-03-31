@@ -1,0 +1,50 @@
+*{
+	margin: 0px;
+	padding: 0px;
+	box-sizing: border-box;
+}
+body{
+	background: #ececec;
+	overflow: hidden;
+}
+.author{
+	margin-left: 10px;
+}
+.main{
+	border:1px solid #cccccc;
+	margin: 0px auto;
+	width:60%;
+	height: 480px;
+	padding: 0px 22px;
+	overflow: scroll;
+	background: #ffffff;
+	box-shadow: 1px 1px 3px #cccccc;;
+}
+.main .messages {
+	margin-top:22px;
+	border-bottom:1px dashed #cccccc;
+}
+.messages .name {
+	font-size:14px;
+	margin-bottom: 10px;
+}
+.messages .content {
+	font-size:18px;
+}
+.messages .date {
+	color: #20A0E9;
+}
+.header{
+	height:100px;
+	width:100%;
+	background: #20A0E9;
+	color:#ffffff;
+}
+.header h1 {
+	line-height: 100px;
+}
+.footer{
+	height:100px;
+	width:100%;
+	background: #20A0E9;
+}
