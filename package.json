@@ -1,17 +1,27 @@
 {
-	"name": "PalChatRoom",
-	"description": "Chatroom based on nodejs and angularjs",
-	"version": "0.0.1",
-	"keywords":["chatroom", "angularjs"],
-	"devDependencies": {
-		"express": ">3.0.0"
-	},
-	"engines": {
-		"node": ">= 0.10.0"
-	},
-	"maintainers":[{
-		"name": "Da",
-		"email": "you@likeada.com"
-	}]
-
+  "name": "PalChatRoom",
+  "description": "Chatroom based on nodejs and angularjs",
+  "version": "0.0.1",
+  "keywords": [
+    "chatroom",
+    "angularjs"
+  ],
+  "devDependencies": {
+  	"node-pre-gyp": "^0.6.4",
+    "express": ">3.0.0",
+    "sqlite3": ">1.0.0",
+    "uuid": ">1.0.0"
+  },
+  "engines": {
+    "node": ">= 0.10.0"
+  },
+  "scripts": {
+    "start": "node setup.js & node server.js"
+  },
+  "maintainers": [
+    {
+      "name": "palhotel",
+      "email": "258838102@qq.com"
+    }
+  ]
 }

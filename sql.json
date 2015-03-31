@@ -1,0 +1,28 @@
+{
+	"PATH":"data/chat.db",
+	"TABLES":{
+		"USERS":[ 
+			"create table users (",
+			"id text not null,",
+			"name text not null,",
+			"password text not null,",
+			"role integer,",
+			"online_state integer,",
+			"primary key(id)",
+			");"
+		],
+		"CHATS": [
+			"create table chats (",
+			"id text not null,",
+			"from_id text not null,",
+			"to_id text not null,",
+			"message text,",
+			"date text,",
+			"primary key(id),",
+			"foreign key (from_id) references users(id),",
+			"foreign key (to_id) references users(id)",
+			");"
+		]
+		
+	}
+}
