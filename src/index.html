@@ -10,10 +10,18 @@
 <body>
 <header class="header"><h1>Welcome</h1></header>
 <div class="main">
-	<div class="messages" ng-repeat="chat in chats">
-		<p class="name"><span class="date">{{chat.date}}</span><span class="author">{{chat.author}}</span></p>
-		<p class="content">{{chat.message}}</p>
+	<div class="left">
+		<div class="messages" ng-repeat="chat in chats">
+			<p class="name"><span class="date">{{chat.date}}</span><span class="author">{{chat.author}}</span></p>
+			<p class="content">{{chat.message}}</p>
+		</div>
 	</div>
+	<div class="right"><p class="user-list" ng-repeat="user in users">{{user.name}}<span class="online">{{user.online}}</span></p></div>
+	<div class="bottom">
+		<textarea class="input-text" ng-model="inputMessage"></textarea>
+		<button class="send-button" ng-click="send()">Send</button>
+	</div>
+
 </div>
 <footer class="footer"></footer>
 </body>

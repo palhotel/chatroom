@@ -2,6 +2,23 @@
 angular.module('chatroom', [])
 .controller('chatCtrl', function($scope){
 		$scope.title = 'Free to Chat';
+		$scope.me = {
+			name: 'Me'
+		};
+		$scope.users = [
+			{
+				name: 'zhang',
+				online: 'online'
+			},
+			{
+				name: 'li',
+				online: 'offline'
+			},
+			{
+				name: 'Me',
+				online: 'online'
+			}
+		];
 		$scope.chats = [
 			{
 				author: 'zhang',
@@ -14,4 +31,12 @@ angular.module('chatroom', [])
 				date: new Date().toLocaleString()
 			}
 		];
+		$scope.send = function() {
+			$scope.chats.push({
+				author: $scope.me.name,
+				message: $scope.inputMessage,
+				date: new Date().toLocaleString()
+			});
+		};
+
 	});
