@@ -1,36 +1,19 @@
 //angular js
 angular.module('chatroom', [])
-.controller('chatCtrl', function($scope){
+.controller('chatCtrl', function($scope, $http, $q){
 		$scope.title = 'Free to Chat';
+		$scope.users = [];
+		$scope.chats = [];
+
+		$q.when($http.get('/api/users')).then(function(res){
+				console.log('Got it', res);
+				$scope.users.push(res.data);
+		});
+		
 		$scope.me = {
 			name: 'Me'
 		};
-		$scope.users = [
-			{
-				name: 'zhang',
-				online: 'online'
-			},
-			{
-				name: 'li',
-				online: 'offline'
-			},
-			{
-				name: 'Me',
-				online: 'online'
-			}
-		];
-		$scope.chats = [
-			{
-				author: 'zhang',
-				message: 'hello,world',
-				date: new Date().toLocaleString()
-			},
-			{
-				author: 'li',
-				message: 'I am here',
-				date: new Date().toLocaleString()
-			}
-		];
+		
 		$scope.send = function() {
 			$scope.chats.push({
 				author: $scope.me.name,
