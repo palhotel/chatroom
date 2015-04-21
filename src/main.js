@@ -3,11 +3,13 @@ angular.module('chatroom', [])
 .controller('chatCtrl', function($scope, $http, $q){
 		$scope.title = 'Free to Chat';
 		$scope.users = [];
-		$scope.chats = [];
+		$scope.chats = [
+			{author:'Da', message:'hello, you are free to say something.', date:new Date().toLocaleString()}
+		];
 
 		$q.when($http.get('/api/users')).then(function(res){
 				console.log('Got it', res);
-				$scope.users.push(res.data);
+				$scope.users = res.data;
 		});
 		
 		$scope.me = {

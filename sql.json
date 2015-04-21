@@ -23,6 +23,8 @@
 			"foreign key (to_id) references users(id)",
 			");"
 		]
-		
-	}
+	},
+	"INIT": [
+		"insert into users (id,name,password,role,online_state) values ('c9b1d0f5-fb96-497a-94f9-ccd10220f8f4', 'Me','',0,1);"
+	]
 }

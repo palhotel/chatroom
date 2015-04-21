@@ -67,6 +67,7 @@ body{
 	display: inline-block;
 	width:20%;
 	height:100%;
+	cursor:pointer;
 }
 .messages .name {
 	font-size:14px;
@@ -84,11 +85,57 @@ body{
 	background: #20A0E9;
 	color:#ffffff;
 }
-.header h1 {
-	line-height: 100px;
+.header div {
+	display: inline-block;
 }
-.footer{
+.header .h1 {
+	line-height: 100px;
+	width: 60%;
+	font-size:32px;
+	font-weight: bold;
+}
+.header .form {
+	line-height: 100px;
+	max-height:36px;
+}
+.header .form input {
+	line-height: 36px;
+	max-height:36px;
+	margin:0 10px;
+	background: #ececec;
+	border: 1px solid #54b2e9;
+	border-radius: 18px;
+	padding: 9px;
+}
+.header .form button.login {
+	line-height: 36px;
+	width:80px;
+	display: inline-block;
+	height: 36px;
+	border-radius: 18px;
+	background: green;
+	color: #ffffff;
+	border: none;
+	cursor: pointer;
+}
+.header .form button.login:hover {
+	line-height: 36px;
+	width:80px;
+	display: inline-block;
+	height: 36px;
+	border-radius: 18px;
+	background: green;
+	color: #ffffff;
+	border: 1px solid #ececec;
+	cursor: pointer;
+}
+.footer {
 	height:100px;
 	width:100%;
 	background: #20A0E9;
+}
+.footer .state {
+	line-height: 100px;
+	color: #ffffff;
+	text-indent: 36px;
 }

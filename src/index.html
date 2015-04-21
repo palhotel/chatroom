@@ -8,7 +8,7 @@
 	<link rel="stylesheet" type="text/css" href="styles/style.css"/>
 </head>
 <body>
-<header class="header"><h1>Welcome</h1></header>
+<header class="header"><div class="h1">Welcome</div><div class="form"><label><span>Name</span><input type="text"/></label><label><span>Password</span><input type="password"/></label><button class="login">Login</button></div></header>
 <div class="main">
 	<div class="left">
 		<div class="messages" ng-repeat="chat in chats">
@@ -21,8 +21,7 @@
 		<textarea class="input-text" ng-model="inputMessage"></textarea>
 		<button class="send-button" ng-click="send()">Send</button>
 	</div>
-
 </div>
-<footer class="footer"></footer>
+<footer class="footer"><p class="state">Free to login, If your name is occupied, please input the password, otherwise input a new name and remember your password.</p></footer>
 </body>
 </html>

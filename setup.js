@@ -7,13 +7,15 @@ fs.exists(SQL_CONFIG.PATH, function(result){
 
 		var db = new sqlite3.Database(SQL_CONFIG.PATH);
 		var tables = SQL_CONFIG.TABLES;
-		db.run(tables.USERS.join(''));
-		db.run(tables.CHATS.join(''));
+		db.serialize(function() {
+			db.run(tables.USERS.join(''));
+			db.run(tables.CHATS.join(''));
+			db.run(SQL_CONFIG.INIT[0]);
+		});
 		db.close();
 		console.log('create database at ' + SQL_CONFIG.PATH)
 
 	} else {
-
 		console.log(result,'no need to setup database at '+ SQL_CONFIG.PATH);
 	}
 });
