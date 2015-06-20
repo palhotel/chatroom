@@ -4,7 +4,7 @@
 		"USERS":[ 
 			"create table users (",
 			"id text not null,",
-			"name text not null,",
+			"name text not null unique,",
 			"password text not null,",
 			"role integer,",
 			"online_state integer,",
@@ -15,7 +15,7 @@
 			"create table chats (",
 			"id text not null,",
 			"from_id text not null,",
-			"to_id text not null,",
+			"to_id text,",
 			"message text,",
 			"date text,",
 			"primary key(id),",
@@ -25,6 +25,6 @@
 		]
 	},
 	"INIT": [
-		"insert into users (id,name,password,role,online_state) values ('c9b1d0f5-fb96-497a-94f9-ccd10220f8f4', 'Me','',0,1);"
+		"insert into users (id,name,password,role,online_state) values ('c9b1d0f5-fb96-497a-94f9-ccd10220f8f4', 'Admin','1qaz2wsx',1,0);"
 	]
 }

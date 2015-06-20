@@ -118,6 +118,33 @@ body{
 	border: none;
 	cursor: pointer;
 }
+
+.footer button.logout {
+	line-height: 36px;
+	width:80px;
+	display: inline-block;
+	height: 36px;
+	border-radius: 18px;
+	font-size: 14px;
+	background: #54c7ff;
+	color: #ffffff;
+	border: none;
+	cursor: pointer;
+}
+
+.footer button.logout:hover {
+	line-height: 36px;
+	width:80px;
+	display: inline-block;
+	height: 36px;
+	border-radius: 18px;
+	font-size: 14px;
+	background: #ffffff;
+	color: darkgray;
+	border: 1px solid #ececec;
+	cursor: pointer;
+}
+
 .header .form button.login:hover {
 	line-height: 36px;
 	width:80px;
@@ -138,4 +165,6 @@ body{
 	line-height: 100px;
 	color: #ffffff;
 	text-indent: 36px;
+	display: inline-block;
+	width:85%;
 }
