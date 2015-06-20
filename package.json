@@ -7,12 +7,15 @@
     "angularjs"
   ],
   "devDependencies": {
-  	"node-pre-gyp": "^0.6.4",
+    "body-parser": "^1.13.1",
     "express": ">3.0.0",
-    "sqlite3": ">1.0.0",
-    "uuid": ">1.0.0",
     "less": ">0.0.0",
-    "squel": ">1.0.0"
+    "log4js": "^0.6.26",
+    "multer": "^0.1.8",
+    "node-pre-gyp": "^0.6.4",
+    "sqlite3": ">1.0.0",
+    "squel": ">1.0.0",
+    "uuid": ">1.0.0"
   },
   "engines": {
     "node": ">= 0.10.0"

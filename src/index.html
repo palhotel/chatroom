@@ -4,24 +4,31 @@
 	<meta charset="UTF-8">
 	<title>{{title}}</title>
 	<script type="text/javascript" src="http://lib.sinaapp.com/js/angular.js/angular-1.2.19/angular.js"></script>
+	<script type="text/javascript" src="http://lib.sinaapp.com/js/angular.js/angular-1.2.19/angular-cookies.min.js"></script>
 	<script type="text/javascript" src="main.js"></script>
 	<link rel="stylesheet" type="text/css" href="styles/style.css"/>
 </head>
 <body>
-<header class="header"><div class="h1">Welcome</div><div class="form"><label><span>Name</span><input type="text"/></label><label><span>Password</span><input type="password"/></label><button class="login">Login</button></div></header>
+<header class="header">
+	<div class="h1">Welcome {{me.name === 'Me' ? '' : ' : ' + me.name}}</div>
+	<div class="form" ng-hide="alreadyLogin">
+		<label><span>Name</span><input ng-model="inputName" type="text"/></label>
+		<label><span>Password</span><input ng-model="inputPass" type="password"/></label>
+		<button class="login" ng-click="login()">Login</button></div>
+</header>
 <div class="main">
-	<div class="left">
+	<div class="left" x-scroll messages="chats">
 		<div class="messages" ng-repeat="chat in chats">
 			<p class="name"><span class="date">{{chat.date}}</span><span class="author">{{chat.author}}</span></p>
 			<p class="content">{{chat.message}}</p>
 		</div>
 	</div>
-	<div class="right"><p class="user-list" ng-repeat="user in users">{{user.name}}<span class="online">{{user.online}}</span></p></div>
-	<div class="bottom">
-		<textarea class="input-text" ng-model="inputMessage"></textarea>
+	<div class="right"><p class="user-list" ng-repeat="user in users">{{user.name}}<span class="online">{{user.online ? ' online' : ' offline'}}</span></p></div>
+	<div ng-show="alreadyLogin === true" class="bottom">
+		<textarea class="input-text" placeholder="press Ctrl + enter send message!" ng-model="inputMessage" ng-keydown="keyDownHandler($event)" ng-keyup="keyUpHandler($event)"></textarea>
 		<button class="send-button" ng-click="send()">Send</button>
 	</div>
 </div>
-<footer class="footer"><p class="state">Free to login, If your name is occupied, please input the password, otherwise input a new name and remember your password.</p></footer>
+<footer class="footer"><p class="state" ng-bind = "statusMessage"></p><button ng-show="alreadyLogin" class="logout" ng-click="logout()">logout</button></footer>
 </body>
 </html>
