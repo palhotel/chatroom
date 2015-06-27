@@ -1,7 +1,9 @@
 //setup sqlite3 database, try to use memory dabase in the future
 var SQL_CONFIG = require('./sql.json');
+var LOG_FILE = 'logs/access.log.default';
 var fs = require('fs');
 var sqlite3 = require('sqlite3').verbose();
+
 fs.exists(SQL_CONFIG.PATH, function(result){
 	if(result !== true){
 
@@ -17,5 +19,11 @@ fs.exists(SQL_CONFIG.PATH, function(result){
 
 	} else {
 		console.log(result,'no need to setup database at '+ SQL_CONFIG.PATH);
+	}
+});
+
+fs.exists(LOG_FILE, function(result){
+	if(result !== true) {
+		fs.renameSync(LOG_FILE, 'logs/access.log');
 	}
 });
