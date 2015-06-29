@@ -1,5 +1,10 @@
 angular.module('chatroom', ['ngCookies'])
-.controller('chatCtrl', function($scope, $http, $q, $cookieStore){
+.controller('chatCtrl', [
+		'$scope',
+		'$http',
+		'$q',
+		'$cookieStore',
+		function($scope, $http, $q, $cookieStore){
 
 		$scope.title = 'Free to Chat';
 		$scope.users = [];
@@ -22,7 +27,7 @@ angular.module('chatroom', ['ngCookies'])
 		var getOnlineUsers = function(users){
 			var newArray = [];
 			users.map(function(item){
-				if(item.hasOwnProperty('online') && item['online'] === 1) {
+				if(item.hasOwnProperty('online') && item.online === 1) {
 					newArray.push(item);
 				}
 			});
@@ -62,10 +67,10 @@ angular.module('chatroom', ['ngCookies'])
 						SaveLoginInfo(res.data.userId, name, pass);
 					}
 					$scope.users.push({name : $scope.me.name, online : 1});
-					$scope.statusMessage = 'Enjoy it !'
+					$scope.statusMessage = 'Enjoy it !';
 				}, function(err) {
 					if(err) {
-						$scope.statusMessage = 'Error:  login failed! Can you try another name ?'
+						$scope.statusMessage = 'Error:  login failed! Can you try another name ?';
 					}
 				});
 		};
@@ -85,7 +90,7 @@ angular.module('chatroom', ['ngCookies'])
 						}
 					}
 					resetStatus();
-					$cookieStore.remove("user");
+					$cookieStore.remove('user');
 				}, function(){
 					$scope.statusMessage = 'Error: logout failed';
 				});
@@ -135,7 +140,7 @@ angular.module('chatroom', ['ngCookies'])
 				});
 		}, 500);
 
-	})
+	}])
 .directive('scroll', function(){
 	return {
 		restrict: 'A',

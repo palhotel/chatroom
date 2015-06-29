@@ -16,7 +16,7 @@ var logs = require('./logger');
 
 var app = express();
 
-app.use(express.static(path.join(__dirname, 'src')));
+app.use(express.static(path.join(__dirname, 'build')));
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(multer()); // for parsing multipart/form-data

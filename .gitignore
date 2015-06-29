@@ -1,5 +1,9 @@
-*.iml
-*.log
 .idea/
 node_modules/
+
+*.iml
+access.log*
 *.db
+npm-debug.log
+build/*.js
+build/*.css

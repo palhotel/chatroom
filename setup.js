@@ -1,6 +1,6 @@
 //setup sqlite3 database, try to use memory dabase in the future
 var SQL_CONFIG = require('./sql.json');
-var LOG_FILE = 'logs/access.log.default';
+var LOG_FILE = 'logs/default.log';
 var fs = require('fs');
 var sqlite3 = require('sqlite3').verbose();
 

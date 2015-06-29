@@ -1,0 +1,13 @@
+{
+    "unused": false,
+    "quotmark": "single",
+    "es3": true,
+    "debug": true,
+    "globals": {
+        "console": true,
+        "document": true,
+        "alert": true,
+        "_": true,
+        "angular": true
+    }
+}
