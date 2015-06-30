@@ -2,25 +2,34 @@
 <html ng-app="chatroom" ng-controller="chatCtrl">
 <head lang="en">
 	<meta charset="UTF-8">
-	<!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
 	<title>{{title}}</title>
-	<!--<link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css"/>-->
+	<link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css"/>
 	<link rel="stylesheet" type="text/css" href="PalChatRoom.css"/>
-	<!--<script src="http://apps.bdimg.com/libs/jquery/2.0.0/jquery.min.js"></script>-->
-	<!--<script src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>-->
+
+	<script src="http://apps.bdimg.com/libs/jquery/2.0.0/jquery.min.js"></script>
+	<script src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="http://lib.sinaapp.com/js/angular.js/angular-1.2.19/angular.js"></script>
 	<script type="text/javascript" src="http://lib.sinaapp.com/js/angular.js/angular-1.2.19/angular-cookies.min.js"></script>
 	<script type="text/javascript" src="PalChatRoom.js"></script>
 </head>
 <body>
-<header class="header">
-	<div class="h1">Welcome {{me.name === 'Me' ? '' : ' : ' + me.name}}</div>
-	<div class="form" ng-hide="alreadyLogin">
-		<label><span>Name</span><input ng-model="inputName" type="text"/></label>
-		<label><span>Password</span><input ng-model="inputPass" type="password"/></label>
-		<button class="login" ng-click="login()">Login</button></div>
+<header class="header container-fluid">
+	<div class="row">
+		<div class="col-sm-6 col-xs-12 h1">Welcome {{me.name === 'Me' ? '' : ' : ' + me.name}}</div>
+		<div class="col-sm-6 col-xs-12" ng-hide="alreadyLogin">
+			<div>
+				<label><span>Name</span><input class="form-control" ng-model="inputName" type="text"/></label>
+				<label><span>Password</span><input class="form-control" ng-model="inputPass" type="password"/></label>
+				<label><button class="btn btn-lg btn-primary btn-block" ng-click="login()">Login</button></label>
+			</div>
+		</div>
+	</div>
+
 </header>
-<div class="main">
+<div class="main container">
 	<div class="left" x-scroll messages="chats">
 		<div class="messages" ng-repeat="chat in chats">
 			<p class="name"><span class="date">{{chat.date}}</span><span class="author">{{chat.author}}</span></p>
@@ -29,10 +38,13 @@
 	</div>
 	<div class="right"><p class="user-list" ng-repeat="user in users">{{user.name}}<span class="online">{{user.online ? ' online' : ' offline'}}</span></p></div>
 	<div ng-show="alreadyLogin === true" class="bottom">
-		<textarea class="input-text" placeholder="press Ctrl + enter send message!" ng-model="inputMessage" ng-keydown="keyDownHandler($event)" ng-keyup="keyUpHandler($event)"></textarea>
-		<button class="send-button" ng-click="send()">Send</button>
+		<textarea class="input-text form-control" placeholder="press Ctrl + enter send message!" ng-model="inputMessage" ng-keydown="keyDownHandler($event)" ng-keyup="keyUpHandler($event)"></textarea>
+		<button class="send-button btn btn-lg btn-primary btn-block" ng-click="send()">Send</button>
 	</div>
 </div>
-<footer class="footer"><p class="state" ng-bind = "statusMessage"></p><button ng-show="alreadyLogin" class="logout" ng-click="logout()">logout</button></footer>
+<footer class="footer container-fluid">
+	<p class="state" ng-bind = "statusMessage"></p>
+	<button ng-show="alreadyLogin" class="btn btn-lg btn-default" ng-click="logout()">logout</button>
+</footer>
 </body>
 </html>
