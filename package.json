@@ -1,7 +1,7 @@
 {
   "name": "PalChatRoom",
   "description": "Chatroom based on nodejs and angularjs",
-  "version": "0.0.1",
+  "version": "1.5.0",
   "keywords": [
     "chatroom",
     "angularjs"
