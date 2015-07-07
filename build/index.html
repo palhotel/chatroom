@@ -36,7 +36,7 @@
 			<p class="content">{{chat.message}}</p>
 		</div>
 	</div>
-	<div class="right"><p class="user-list" ng-repeat="user in users">{{user.name}}<span class="online">{{user.online ? ' online' : ' offline'}}</span></p></div>
+	<div class="right"><p class="user-list" ng-repeat="user in users">{{user.name}}</p></div>
 	<div ng-show="alreadyLogin === true" class="bottom">
 		<textarea class="input-text form-control" placeholder="press Ctrl + enter send message!" ng-model="inputMessage" ng-keydown="keyDownHandler($event)" ng-keyup="keyUpHandler($event)"></textarea>
 		<button class="send-button btn btn-lg btn-primary btn-block" ng-click="send()">Send</button>

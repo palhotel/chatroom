@@ -154,9 +154,7 @@ angular.module('chatroom', ['ngCookies'])
 
 			}, function(newValue, oldValue){
 				var scrollHeight = elem.prop('scrollHeight');
-				setTimeout(function(){
-					elem.prop('scrollTop', scrollHeight);
-				}, 100);
+				elem.prop('scrollTop', scrollHeight);
 			});
 		}
 	};
