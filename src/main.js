@@ -1,4 +1,4 @@
-angular.module('chatroom', ['ngCookies'])
+angular.module('chatroom', ['ngCookies', 'ng'])
 .controller('chatCtrl', [
 		'$scope',
 		'$http',
@@ -52,6 +52,34 @@ angular.module('chatroom', ['ngCookies'])
 			}
 		};
 
+		var updateUserList = function(){
+			$q.when($http.get('/api/users'))
+				.then(function(res){
+					$scope.users = getOnlineUsers(res.data);
+				});
+		};
+
+		var updateMessages = function(){
+			$q.when($http.get('/api/messages'))
+				.then(function(res){
+					$scope.chats = res.data;
+				});
+		};
+
+		var configWebSocket = function(socket){
+			socket.on('server:someone-login', function(){
+				updateUserList();
+			});
+			socket.on('server:someone-logout', function(){
+				updateUserList();
+			});
+			socket.on('server:someone-sent', function(){
+				updateMessages();
+			});
+		};
+
+
+
 		var tryLogin = function(name , pass){
 			$q.when($http.post('/api/security/userlogin', {name : name, password: pass}))
 				.then(function(res){
@@ -68,6 +96,9 @@ angular.module('chatroom', ['ngCookies'])
 					}
 					$scope.users.push({name : $scope.me.name, online : 1});
 					$scope.statusMessage = 'Enjoy it !';
+					if($scope.socket){
+						$scope.socket.emit('user:login', $scope.me.userId);
+					}
 				}, function(err) {
 					if(err) {
 						$scope.statusMessage = 'Error:  login failed! Can you try another name ?';
@@ -91,6 +122,9 @@ angular.module('chatroom', ['ngCookies'])
 					}
 					resetStatus();
 					$cookieStore.remove('user');
+					if($scope.socket){
+						$scope.socket.emit('user:logout');
+					}
 				}, function(){
 					$scope.statusMessage = 'Error: logout failed';
 				});
@@ -102,6 +136,9 @@ angular.module('chatroom', ['ngCookies'])
 				$q.when($http.post('/api/messages', {from_id : $scope.me.userId, message : $scope.inputMessage || ' ', date : datetime}))
 					.then(function(res){
 						$scope.inputMessage = '';
+						if($scope.socket) {
+							$scope.socket.emit('user:send-message');
+						}
 					});
 			}
 		};
@@ -125,20 +162,13 @@ angular.module('chatroom', ['ngCookies'])
 		};
 
 		resetStatus();
+		updateUserList();
+		updateMessages();
+
+		$scope.socket = io();
+		configWebSocket($scope.socket);
+
 		getSavedInfo();
-
-		$q.when($http.get('/api/users'))
-			.then(function(res){
-				$scope.users = getOnlineUsers(res.data);
-			});
-
-		//polling
-		setInterval(function(){
-			$q.when($http.get('/api/messages'))
-				.then(function(res){
-					$scope.chats = res.data;
-				});
-		}, 500);
 
 	}])
 .directive('scroll', function(){
@@ -148,7 +178,6 @@ angular.module('chatroom', ['ngCookies'])
 			messages : '='
 		},
 		link: function(scope, elem){
-
 			scope.$watch(function(){
 				return scope.messages.length;
 

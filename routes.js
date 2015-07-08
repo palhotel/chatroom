@@ -37,6 +37,7 @@ exports.getAllUsers = function(req, res){
 			res.send(data);
 		}
 	});
+
 };
 
 exports.getMatchUser = function(req, res){
@@ -150,6 +151,21 @@ exports.userLogOut = function(req, res) {
 			res.sendStatus(404);
 		} else {
 			res.sendStatus(204);
+		}
+	});
+};
+
+exports.serverCallLogOut = function(userId){
+	//todo: move to dao layer
+	var sql = sqlBuilder
+		.update()
+		.table('users')
+		.set('online_state', 0)
+		.where(' id =? ', userId)
+		.toString();
+	runQuery(sql, function(err){
+		if(err) {
+			logger.error('Got error at serverSideCallLogOut :' + err)
 		}
 	});
 };

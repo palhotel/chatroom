@@ -14,7 +14,8 @@ A chat room based on a Node.JS server, the Frontend should be angularJS and HTML
 |-------|--------|
 |1.0|frontend do polling|
 |1.5|responsive design, grunt, less, bootstrap|
-|2.0（wip)|websocket and unit test|
+|1.6|half socket.io and half ajax|
+|2.0(wip)|video|
 
 # Links
 www.likeada.com
