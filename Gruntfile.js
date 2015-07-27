@@ -13,7 +13,7 @@ module.exports = function(grunt){
                 footer: '\n/* <%= pkg.name %> end ! */'
             },
             build: {
-                src: ['src/*.js'],
+                src: ['<%= build_path %><%= pkg.name %>.js'],
                 dest: '<%= build_path %><%= pkg.name %>.js'
             }
         },
@@ -25,7 +25,7 @@ module.exports = function(grunt){
         },
         concat: {
             dist: {
-                src: ['<%= src_js %>'],
+                src: ['src/app.js', 'src/controllers/*.js', 'src/directives/*.js'],
                 dest: '<%= build_path %><%= pkg.name %>.js'
             }
         },

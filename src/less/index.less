@@ -1,12 +1,23 @@
+@pal-white: #FFFFFF;
+@pal-gray: #CCCCCC;
+@pal-blue: #20A0E9;
+@pal-lite: #ECECEC;
+@pal-black: #000000;
+
+*{
+  margin: 0;
+  padding : 0;
+}
 html,body{
-  background: #ececec;
+  background: @pal-lite;
   overflow: hidden;
   height:100%;
+  position:relative;
 }
 
 .header{
-  background: #20A0E9;
-  color:#ffffff;
+  background: @pal-blue;
+  color:@pal-white;
   .h1 {
     font-size:32px;
     font-weight: bold;
@@ -37,7 +48,7 @@ html,body{
     display: inline-block;
     vertical-align: top;
     font-size: 14px;
-    height: 480px;
+    height: 440px;
   }
   .left {
     width: 80%;
@@ -64,16 +75,24 @@ html,body{
     margin: 0px;
     padding: 22px 0px;
   }
+  button{
+    display: inline-block;
+  }
+  .draw-btton {
+    width:3%;
+    margin: 0;
+    padding : 0;
+    height: 100%;
+  }
   .input-text {
     display: inline-block;
-    width:80%;
+    width:77%;
     height: 100%;
     vertical-align: top;
     font-size:14px;
   }
   .send-button {
-    display: inline-block;
-    width:20%;
+    width:18%;
     height:100%;
     cursor:pointer;
   }
@@ -90,22 +109,76 @@ html,body{
     }
   }
 }
+
 .footer {
   width:100%;
   min-height: 50px;
-  background: #20A0E9;
+  background: @pal-blue;
   position:fixed;
   margin-bottom: 0;
   bottom:0;
   .state {
     font-size:18px;
-    color: #ffffff;
+    color: @pal-white;
     text-indent: 36px;
     display: inline-block;
     width:75%;
   }
   button {
     background: #22afff;
-    color: #cccccc;
+    color: @pal-gray;
   }
+}
+
+.whiteboard{
+  width:400px;
+  height:340px;
+  margin: 0 auto;
+  position: absolute;
+  .tool-box{
+    height:32px;
+    border: 1px solid @pal-blue;
+    background : @pal-white;
+    font-size:0;
+    .color-box{
+      width:100%;
+      ul,li{
+        list-style:none;
+      }
+      li {
+        width:30px;
+        height:30px;
+        border: 1px solid @pal-gray;
+        cursor:pointer;
+        display:inline-block;
+      }
+      .red-box{
+        background: #FF0000;
+        color: @pal-lite;
+      }
+      .green-box{
+        background: #00FF00;
+        color: @pal-lite;
+      }
+      .blue-box{
+        background: @pal-blue;
+        color: @pal-lite;
+      }
+      .white-box{
+        background: @pal-white;
+        color: @pal-gray;
+      }
+    }
+  }
+
+  .draw-canvas{
+    position: relative;
+    margin-top:2px;
+    border:1px solid @pal-gray;
+    background: @pal-white;
+  }
+}
+.move-to-right{
+  position: absolute;
+  right: 0;
 }
