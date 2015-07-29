@@ -4,6 +4,7 @@ var MAX_MESSAGES = 20;
 
 var sqlBuilder = require('squel');
 var uuid = require('uuid');
+var fs = require('fs');
 
 var sqlite3 = require('sqlite3').verbose();
 var DATA_PATH = 'data/chat.db';
@@ -169,3 +170,17 @@ exports.serverCallLogOut = function(userId){
 		}
 	});
 };
+
+exports.getPaint = function(req, res){
+	var data = fs.readFileSync('./data/img.text');
+	res.send(data);
+};
+var savePaintData = function(data){
+	fs.writeFileSync('./data/img.text', data);
+};
+exports.savePaint = function(req, res){
+	var picData = req.body.pic;
+	savePaintData(picData);
+	res.sendStatus(200);
+};
+exports.savePaintData = savePaintData;
