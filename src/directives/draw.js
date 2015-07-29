@@ -1,4 +1,7 @@
-chatroom.directive('draw', function(){
+chatroom.directive('draw', [
+    'socketService',
+    '$http',
+    function(socketService){
     var defaults = {
         lineCap : 'round',
         lineJoin : 'round'
@@ -12,12 +15,43 @@ chatroom.directive('draw', function(){
         link: function(scope, elem, attr){
             var ctx=elem.get(0).getContext('2d');
             ctx = $.extend(ctx, defaults, scope.brush);
-            var mouseX, mouseY;
+            var mouseX, mouseY, newX, newY;
             var isMouseDown = false;
 
-            scope.$watch('brush.strokeStyle', function(newVal){
-                ctx.strokeStyle = newVal;
+            scope.$watch('pic', function(newVal, oldVal){
+                if(scope.pic){
+                    var imageObj = new Image();
+                    imageObj.src = scope.pic;
+                    if(isMouseDown === false){
+                        imageObj.onload = function() {
+                            ctx.drawImage(this, 0, 0);
+                        };
+                    } else{
+                        imageObj.onload = function() {
+                            ctx.drawImage(this, 0, 0);
+                            if(mouseX != newX || mouseY != newY){
+                                redraw();
+                            }
+                        };
+                    }
+
+                }
             });
+
+            scope.$watch('brush', function(newVal){
+                if(newVal && newVal.hasOwnProperty('strokeStyle') && newVal.hasOwnProperty('lineWidth')){
+                    ctx.strokeStyle = newVal.strokeStyle;
+                    ctx.lineWidth = newVal.lineWidth;
+                }
+            }, true);
+
+            var redraw = function(){
+                ctx.beginPath();
+                ctx.moveTo(mouseX, mouseY);
+                ctx.lineTo(newX, newY);
+                ctx.stroke();
+
+            };
 
             elem.mousedown(function(e) {
                 mouseX = e.offsetX;
@@ -28,32 +62,27 @@ chatroom.directive('draw', function(){
 
             elem.mousemove(function(e){
                 if(isMouseDown) {
-                    var x1 = mouseX;
-                    var y1 = mouseY;
-                    var x2 = e.offsetX;
-                    var y2 = e.offsetY;
-
-                    ctx.beginPath();
-                    ctx.moveTo(x1, y1);
-                    ctx.lineTo(x2, y2);
-                    ctx.stroke();
-
-                    mouseX = x2;
-                    mouseY = y2;
+                    newX = e.offsetX;
+                    newY = e.offsetY;
+                    redraw();
+                    mouseX = newX;
+                    mouseY = newY;
                 }
             });
 
-            elem.mouseup(function(e){
+            var savePaint = function(){
                 isMouseDown = false;
-                scope.pic = elem.get(0).toDataURL();
+                socketService.io.emit('user:save-paint', elem.get(0).toDataURL());
                 elem.css({cursor: 'default'});
+            };
+
+            elem.mouseup(function(e){
+                savePaint();
             });
 
             elem.mouseleave(function(e){
-                isMouseDown = false;
-                scope.pic = elem.get(0).toDataURL();
-                elem.css({cursor: 'default'});
+                savePaint();
             });
         }
     };
-});
+}]);

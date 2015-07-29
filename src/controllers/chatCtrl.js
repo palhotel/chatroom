@@ -3,7 +3,8 @@ chatroom.controller('chatCtrl', [
     '$http',
     '$q',
     '$cookieStore',
-    function($scope, $http, $q, $cookieStore){
+    'socketService',
+    function($scope, $http, $q, $cookieStore, socketService){
 
         $scope.title = 'Free to Chat';
         $scope.users = [];
@@ -169,7 +170,7 @@ chatroom.controller('chatCtrl', [
         updateUserList();
         updateMessages();
 
-        $scope.socket = io();
+        $scope.socket = socketService.io;
         configWebSocket($scope.socket);
 
         getSavedInfo();

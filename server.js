@@ -37,6 +37,9 @@ app.get('/api/messages', routes.getMessages);
 app.get('/api/messages/:id', routes.getMessageById);
 app.post('/api/messages', routes.addMessage);
 
+app.get('/api/paint', routes.getPaint);
+app.put('/api/paint,', routes.savePaint);
+
 var io = socketIO();
 var SELF_URL = ENV.PROTOCOL + ENV.HOST + ':' + ENV.PORT;
 var socketIds = {};
@@ -65,6 +68,11 @@ io.on('connection', function(socket){
 	socket.on('user:logout', function(){
 		io.emit('server:someone-logout');
 	});
+
+	socket.on('user:save-paint', function(data){
+		routes.savePaintData(data);
+		io.emit('server:someone-paint');
+	})
 });
 
 io.listen(server);
