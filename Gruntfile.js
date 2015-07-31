@@ -7,6 +7,9 @@ module.exports = function(grunt){
         src_js: 'src/**/*.js',
         src_less: 'src/less/*.less',
 
+        copy: {
+            build: {expand: true, cwd: 'src/', src: ['index.html'], dest: 'build/', filter: 'isFile'}
+        },
         uglify: {
             options: {
                 banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n',
@@ -48,6 +51,8 @@ module.exports = function(grunt){
     });
 
     // Load the plugin that provides the "uglify" task.
+
+    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-concat');
@@ -55,6 +60,6 @@ module.exports = function(grunt){
     grunt.loadNpmTasks('grunt-contrib-cssmin');
 
     // Default task(s).
-    grunt.registerTask('default', ['less', 'jshint', 'concat']);
-    grunt.registerTask('production', ['less', 'jshint', 'concat', 'cssmin', 'uglify']);
+    grunt.registerTask('default', ['less', 'jshint', 'concat', 'copy']);
+    grunt.registerTask('production', ['less', 'jshint', 'concat', 'cssmin', 'uglify', 'copy']);
 };

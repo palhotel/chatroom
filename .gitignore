@@ -1,11 +1,9 @@
 .idea/
 node_modules/
-build/vendors/
+build/
 
 *.iml
 access.log*
 data/chat.db
 data/img.text
 npm-debug.log
-build/*.js
-build/*.css

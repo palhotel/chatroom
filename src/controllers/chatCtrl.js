@@ -166,6 +166,14 @@ chatroom.controller('chatCtrl', [
 
         };
 
+        $scope.shortnameToImage = function(text){
+            if(emojione && angular.isObject(emojione)){
+                return emojione.shortnameToImage(text);
+            } else {
+                return text;
+            }
+        };
+
         resetStatus();
         updateUserList();
         updateMessages();
