@@ -22,5 +22,5 @@ A chat room based on a Node.JS server, the Frontend should be angularJS and HTML
 www.likeada.com
 
 # License
-(The GDPL License).
+(The GDPL License) 
 Copyright (c) 2015 Pepe.
