@@ -9,8 +9,10 @@ chatroom.directive('scroll', function(){
                 return scope.messages.length;
 
             }, function(newValue, oldValue){
-                var scrollHeight = elem.prop('scrollHeight');
-                elem.prop('scrollTop', scrollHeight);
+                setTimeout(function(){
+                    var scrollHeight = elem.prop('scrollHeight');
+                    elem.prop('scrollTop', scrollHeight);
+                }, 0);
             });
         }
     };

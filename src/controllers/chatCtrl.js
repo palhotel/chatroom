@@ -81,23 +81,30 @@ chatroom.controller('chatCtrl', [
 
 
         var tryLogin = function(name , pass){
+            //todo: store session id in cookie
             $q.when($http.post('/api/security/userlogin', {name : name, password: pass}))
                 .then(function(res){
                     if(res && res.data && res.data.login === true){
                         SaveLoginInfo(res.data.userId, name, pass);
                         return null;
+                    } else if(res && res.data && res.data.overMaxUsers === true){
+                        return {overMaxUsers: true};
                     } else {
                         return $q.when($http.post('/api/users', {name : name, password: pass, online_state: 1, role: 0}));
                     }
                 })
                 .then(function(res){
-                    if(res && res.data && res.data.userId) {
-                        SaveLoginInfo(res.data.userId, name, pass);
-                    }
-                    $scope.users.push({name : $scope.me.name, online : 1});
-                    $scope.statusMessage = 'Enjoy it !';
-                    if($scope.socket){
-                        $scope.socket.emit('user:login', $scope.me.userId);
+                    if(res && res.overMaxUsers === true){
+                        $scope.statusMessage = 'There are too many people in the room now ! please wait a moment and refresh';
+                    } else {
+                        if(res && res.data && res.data.userId) {
+                            SaveLoginInfo(res.data.userId, name, pass);
+                        }
+                        $scope.users.push({name : $scope.me.name, online : 1});
+                        $scope.statusMessage = 'Enjoy it !';
+                        if($scope.socket){
+                            $scope.socket.emit('user:login', $scope.me.userId);
+                        }
                     }
                 }, function(err) {
                     if(err) {

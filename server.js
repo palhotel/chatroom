@@ -5,6 +5,8 @@ var ENV = {
 	PROTOCOL : 'http://',
 	HOST: 'localhost'
 };
+var SELF_URL = ENV.PROTOCOL + ENV.HOST + ':' + ENV.PORT;
+global.appRuntime = {onlineUserCount : 0};
 
 var bodyParser = require('body-parser');
 var multer = require('multer');
@@ -13,7 +15,8 @@ var http = require('http');
 var path = require('path');
 var less = require('less');
 var socketIO = require('socket.io');
-var routes = require('./routes');
+
+var resources = require('./resources');
 var logs = require('./logger');
 
 var app = express();
@@ -26,32 +29,23 @@ app.use(logs.log4js.connectLogger(logs.logger, {level : 'auto'}));
 
 var server = app.listen(ENV.PORT);
 
-app.get('/api/users', routes.getAllUsers);
-app.get('/api/users/:id', routes.getUserById);
-app.post('/api/users', routes.addUser);
+require('./routes')(app, resources);
 
-app.post('/api/security/userlogin', routes.getMatchUser);
-app.post('/api/security/userlogout', routes.userLogOut);
-
-app.get('/api/messages', routes.getMessages);
-app.get('/api/messages/:id', routes.getMessageById);
-app.post('/api/messages', routes.addMessage);
-
-app.get('/api/paint', routes.getPaint);
-app.put('/api/paint,', routes.savePaint);
+setInterval(function(){
+	resources.clearOldMessages();
+}, 5000);
 
 var io = socketIO();
-var SELF_URL = ENV.PROTOCOL + ENV.HOST + ':' + ENV.PORT;
 var socketIds = {};
-
 io.on('connection', function(socket){
 	logs.logger.info('a user connected, socket.id : ' + socket.id);
 
 	socket.on('disconnect', function(){
 		logs.logger.info('user disconnected, socket.id : ' + socket.id);
 		if(socketIds[socket.id]) {
-			routes.serverCallLogOut(socketIds[socket.id]);
+			resources.serverCallLogOut(socketIds[socket.id]);
 			socketIds[socket.id] = null;
+			global.appRuntime.onlineUserCount --;
 			io.emit('server:someone-logout');
 		}
 	});
@@ -62,15 +56,17 @@ io.on('connection', function(socket){
 
 	socket.on('user:login', function(data){
 		socketIds[socket.id] = data;
+		global.appRuntime.onlineUserCount ++;
 		io.emit('server:someone-login');
 	});
 
 	socket.on('user:logout', function(){
+		global.appRuntime.onlineUserCount --;
 		io.emit('server:someone-logout');
 	});
 
 	socket.on('user:save-paint', function(data){
-		routes.savePaintData(data);
+		resources.savePaintData(data);
 		io.emit('server:someone-paint');
 	})
 });
