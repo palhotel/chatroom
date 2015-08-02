@@ -16,52 +16,56 @@
 </head>
 
 
-<body>
-
-<header class="header container-fluid">
-	<div class="row">
-		<div class="col-sm-6 col-xs-12 h1">Welcome  {{me.name === 'Me' ? '' : ' : ' + me.name}}</div>
-		<div class="col-sm-6 col-xs-12 login-input" ng-hide="alreadyLogin">
-			<div>
-				<label><span>Name</span><input class="form-control" ng-model="inputName" type="text"/></label>
-				<label><span>Password</span><input class="form-control" ng-model="inputPass" type="password"/></label>
-				<label><button class="btn btn-lg btn-primary btn-block" ng-click="login()">Login</button></label>
+<body x-loading>
+<div class="main-wrapper">
+	<header class="header container-fluid">
+		<div class="row">
+			<div class="col-sm-6 col-xs-12 h1">Welcome  {{me.name === 'Me' ? '' : ' : ' + me.name}}</div>
+			<div class="col-sm-6 col-xs-12 login-input" ng-hide="alreadyLogin">
+				<div>
+					<label><span>Name</span><input class="form-control" ng-model="inputName" type="text"/></label>
+					<label><span>Password</span><input class="form-control" ng-model="inputPass" type="password"/></label>
+					<label><button class="btn btn-lg btn-primary btn-block" ng-click="login()">Login</button></label>
+				</div>
 			</div>
 		</div>
-	</div>
-</header>
+	</header>
 
-<div class="main container" ng-class="{'move-to-right' : wantDraw === true}">
-	<div class="left" x-scroll messages="chats">
-		<div class="messages" ng-repeat="chat in chats">
-			<p class="name"><span class="date">{{chat.date}}</span><span class="author">{{chat.author}}</span></p>
-			<p class="content" ng-bind-html="shortnameToImage(chat.message)"></p>
+	<div class="main container" ng-class="{'move-to-right' : wantDraw === true}">
+		<div class="left" x-scroll messages="chats">
+			<div class="messages" ng-repeat="chat in chats">
+				<p class="name"><span class="date">{{chat.date}}</span><span class="author">{{chat.author}}</span></p>
+				<p class="content" ng-bind-html="shortnameToImage(chat.message)"></p>
+			</div>
+		</div>
+		<div class="right"><p class="user-list" ng-repeat="user in users">{{user.name}}</p></div>
+		<div ng-show="alreadyLogin === true" class="bottom">
+			<button class="draw-btton btn btn-lg btn-sm btn-block" ng-click="switchBoard()">&gt;&gt;</button>
+			<textarea class="input-text form-control" placeholder="press Ctrl + enter send message!" ng-model="inputMessage" ng-keydown="keyDownHandler($event)" ng-keyup="keyUpHandler($event)"></textarea>
+			<button class="send-button btn btn-lg btn-primary btn-block" ng-click="send()">Send</button>
 		</div>
 	</div>
-	<div class="right"><p class="user-list" ng-repeat="user in users">{{user.name}}</p></div>
-	<div ng-show="alreadyLogin === true" class="bottom">
-		<button class="draw-btton btn btn-lg btn-sm btn-block" ng-click="switchBoard()">&gt;&gt;</button>
-		<textarea class="input-text form-control" placeholder="press Ctrl + enter send message!" ng-model="inputMessage" ng-keydown="keyDownHandler($event)" ng-keyup="keyUpHandler($event)"></textarea>
-		<button class="send-button btn btn-lg btn-primary btn-block" ng-click="send()">Send</button>
+
+	<footer class="footer container-fluid">
+		<p class="state" ng-bind = "statusMessage"></p>
+		<button ng-show="alreadyLogin" class="btn btn-lg btn-default" ng-click="logout()">logout</button>
+	</footer>
+
+	<div ng-show="wantDraw" class="whiteboard" ng-controller="whiteboardCtrl">
+		<div class="tool-box">
+			<button type="button" class="color-box btn btn-sm" colorpicker ng-model="brush.strokeStyle">
+				<i class="glyphicon glyphicon-pushpin" style="color:#FFFFFF;"></i>
+			</button>
+			<button type="button" class="size-box btn btn-sm">
+				<i class="glyphicon glyphicon-tint"></i>
+			</button>
+		</div>
+		<canvas x-draw data-brush="brush" width="400px" height="300px" data-pic="pic" class="draw-canvas"></canvas>
 	</div>
 </div>
-
-<footer class="footer container-fluid">
-	<p class="state" ng-bind = "statusMessage"></p>
-	<button ng-show="alreadyLogin" class="btn btn-lg btn-default" ng-click="logout()">logout</button>
-</footer>
-
-<div ng-show="wantDraw" class="whiteboard" ng-controller="whiteboardCtrl">
-	<div class="tool-box">
-		<button type="button" class="color-box btn btn-sm" colorpicker ng-model="brush.strokeStyle">
-			<i class="glyphicon glyphicon-pushpin" style="color:#FFFFFF;"></i>
-		</button>
-		<button type="button" class="size-box btn btn-sm">
-			<i class="glyphicon glyphicon-tint"></i>
-		</button>
-	</div>
-	<canvas x-draw data-brush="brush" width="400px" height="300px" data-pic="pic" class="draw-canvas"></canvas>
+<div class="loading-div">
 </div>
+
 
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>

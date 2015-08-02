@@ -8,11 +8,15 @@
   margin: 0;
   padding : 0;
 }
-html,body{
+html,body, .main-wrapper{
   background: @pal-lite;
   overflow: hidden;
   height:100%;
   position:relative;
+}
+.main-wrapper {
+  visibility: hidden;
+  z-index: 0;
 }
 
 .header{
@@ -162,4 +166,16 @@ html,body{
 .move-to-right{
   position: absolute;
   right: 0;
+}
+
+.loading-div{
+  position: absolute;
+  display:block;
+  left: 50%;
+  top: 50%;
+  font-size:16px;
+  z-index: 10;
+  height: 100px;
+  width: 100px;
+  background : url("../images/loading.gif") no-repeat;
 }
