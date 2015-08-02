@@ -48,6 +48,7 @@ chatroom.controller('chatCtrl', [
         var getSavedInfo = function(){
             var savedInfo = $cookieStore.get('user');
             if(savedInfo && savedInfo.hasOwnProperty('password')) {
+                $scope.alreadyLogin = true;
                 tryLogin(savedInfo.name, savedInfo.password);
             }
         };
@@ -108,6 +109,7 @@ chatroom.controller('chatCtrl', [
                     }
                 }, function(err) {
                     if(err) {
+                        $scope.alreadyLogin = false;
                         $scope.statusMessage = 'Error:  login failed! Can you try another name ?';
                     }
                 });
@@ -189,5 +191,7 @@ chatroom.controller('chatCtrl', [
         configWebSocket($scope.socket);
 
         getSavedInfo();
+
+        $scope.loadingDone = true;
 
     }]);

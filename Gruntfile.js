@@ -8,7 +8,7 @@ module.exports = function(grunt){
         src_less: 'src/less/*.less',
 
         copy: {
-            build: {expand: true, cwd: 'src/', src: ['index.html'], dest: 'build/', filter: 'isFile'}
+            build: {expand: true, cwd: 'src/', src: ['index.html', 'images/loading.gif'], dest: 'build/', filter: 'isFile'}
         },
         uglify: {
             options: {
