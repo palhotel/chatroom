@@ -53,10 +53,12 @@
 
 <div ng-show="wantDraw" class="whiteboard" ng-controller="whiteboardCtrl">
 	<div class="tool-box">
-		<ul class="color-box">
-			<li ng-repeat="color in colors" ng-class="color.style" ng-click="setBrushColor(color.name);"></li>
-			<li ng-repeat="size in sizes" style="border:none" ng-click="setBrushSize(size);">{{size}}</li>
-		</ul>
+		<button type="button" class="color-box btn btn-sm" colorpicker ng-model="brush.strokeStyle">
+			<i class="glyphicon glyphicon-pushpin" style="color:#FFFFFF;"></i>
+		</button>
+		<button type="button" class="size-box btn btn-sm">
+			<i class="glyphicon glyphicon-tint"></i>
+		</button>
 	</div>
 	<canvas x-draw data-brush="brush" width="400px" height="300px" data-pic="pic" class="draw-canvas"></canvas>
 </div>
