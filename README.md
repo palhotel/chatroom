@@ -1,13 +1,18 @@
 chatroom
 ========
 A chat room based on a Node.JS server, the Frontend should be angularJS and HTML5.
+![Travis](https://travis-ci.org/palhotel/chatroom.svg?branch=master "https://travis-ci.org")
 
 # Get start
 - First install the Node.JS
-- using `npm install grunt-cli -g`to install grunt
+- using `sudo npm install grunt-cli -g`to install grunt
 - using `npm install` to install dependencies
 - using `npm start` to start the server
 - when change css and js, run `grunt` or `grunt production` to build css and js
+
+# Tests
+- need phantomjs & karm `sudo npm install -g karma phantomjs karma-phantomjs-launcher`
+- `npm test`
 
 # versions
 |version|features|
