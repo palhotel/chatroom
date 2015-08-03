@@ -1,1 +1,1 @@
-var chatroom = angular.module('chatroom', ['ngCookies', 'ng']);
+var chatroom = angular.module('chatroom', ['ngCookies', 'ng', 'ngSanitize']);

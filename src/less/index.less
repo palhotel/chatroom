@@ -8,11 +8,15 @@
   margin: 0;
   padding : 0;
 }
-html,body{
+html,body, .main-wrapper{
   background: @pal-lite;
   overflow: hidden;
   height:100%;
   position:relative;
+}
+.main-wrapper {
+  visibility: hidden;
+  z-index: 0;
 }
 
 .header{
@@ -140,36 +144,15 @@ html,body{
     border: 1px solid @pal-blue;
     background : @pal-white;
     font-size:0;
-    .color-box{
-      width:100%;
-      font-size:14px;
-      line-height: 30px;
-      ul,li{
-        list-style:none;
-      }
-      li {
-        width:30px;
-        height:30px;
-        border: 1px solid @pal-gray;
-        cursor:pointer;
-        display:inline-block;
-      }
-      .red-box{
-        background: #FF0000;
-        color: @pal-lite;
-      }
-      .green-box{
-        background: #00FF00;
-        color: @pal-lite;
-      }
-      .blue-box{
-        background: @pal-blue;
-        color: @pal-lite;
-      }
-      .white-box{
-        background: @pal-white;
-        color: @pal-gray;
-      }
+    button {
+      height: 30px;
+      width: 30px;
+      border: 1px solid @pal-gray;
+    }
+    .size-box{
+      background : @pal-white;
+      margin-left:2px;
+      position: relative;
     }
   }
 
@@ -183,4 +166,16 @@ html,body{
 .move-to-right{
   position: absolute;
   right: 0;
+}
+
+.loading-div{
+  position: absolute;
+  display:block;
+  left: 50%;
+  top: 50%;
+  font-size:16px;
+  z-index: 10;
+  height: 100px;
+  width: 100px;
+  background : url("../images/loading.gif") no-repeat;
 }

@@ -48,6 +48,7 @@ chatroom.controller('chatCtrl', [
         var getSavedInfo = function(){
             var savedInfo = $cookieStore.get('user');
             if(savedInfo && savedInfo.hasOwnProperty('password')) {
+                $scope.alreadyLogin = true;
                 tryLogin(savedInfo.name, savedInfo.password);
             }
         };
@@ -81,26 +82,34 @@ chatroom.controller('chatCtrl', [
 
 
         var tryLogin = function(name , pass){
+            //todo: store session id in cookie
             $q.when($http.post('/api/security/userlogin', {name : name, password: pass}))
                 .then(function(res){
                     if(res && res.data && res.data.login === true){
                         SaveLoginInfo(res.data.userId, name, pass);
                         return null;
+                    } else if(res && res.data && res.data.overMaxUsers === true){
+                        return {overMaxUsers: true};
                     } else {
                         return $q.when($http.post('/api/users', {name : name, password: pass, online_state: 1, role: 0}));
                     }
                 })
                 .then(function(res){
-                    if(res && res.data && res.data.userId) {
-                        SaveLoginInfo(res.data.userId, name, pass);
-                    }
-                    $scope.users.push({name : $scope.me.name, online : 1});
-                    $scope.statusMessage = 'Enjoy it !';
-                    if($scope.socket){
-                        $scope.socket.emit('user:login', $scope.me.userId);
+                    if(res && res.overMaxUsers === true){
+                        $scope.statusMessage = 'There are too many people in the room now ! please wait a moment and refresh';
+                    } else {
+                        if(res && res.data && res.data.userId) {
+                            SaveLoginInfo(res.data.userId, name, pass);
+                        }
+                        $scope.users.push({name : $scope.me.name, online : 1});
+                        $scope.statusMessage = 'Enjoy it !';
+                        if($scope.socket){
+                            $scope.socket.emit('user:login', $scope.me.userId);
+                        }
                     }
                 }, function(err) {
                     if(err) {
+                        $scope.alreadyLogin = false;
                         $scope.statusMessage = 'Error:  login failed! Can you try another name ?';
                     }
                 });
@@ -166,6 +175,14 @@ chatroom.controller('chatCtrl', [
 
         };
 
+        $scope.shortnameToImage = function(text){
+            if(emojione && angular.isObject(emojione)){
+                return emojione.shortnameToImage(text);
+            } else {
+                return text;
+            }
+        };
+
         resetStatus();
         updateUserList();
         updateMessages();
@@ -174,5 +191,7 @@ chatroom.controller('chatCtrl', [
         configWebSocket($scope.socket);
 
         getSavedInfo();
+
+        $scope.loadingDone = true;
 
     }]);
