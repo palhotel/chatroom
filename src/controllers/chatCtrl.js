@@ -1,10 +1,10 @@
 chatroom.controller('chatCtrl', [
     '$scope',
-    '$http',
     '$q',
     '$cookieStore',
     'socketService',
-    function($scope, $http, $q, $cookieStore, socketService){
+    'rest',
+    function($scope, $q, $cookieStore, socketService, rest){
 
         $scope.title = 'Free to Chat';
         $scope.users = [];
@@ -54,14 +54,14 @@ chatroom.controller('chatCtrl', [
         };
 
         var updateUserList = function(){
-            $q.when($http.get('/api/users'))
+            rest.getUsers()
                 .then(function(res){
                     $scope.users = getOnlineUsers(res.data);
                 });
         };
 
         var updateMessages = function(){
-            $q.when($http.get('/api/messages'))
+            rest.getChats()
                 .then(function(res){
                     $scope.chats = res.data;
                 });
@@ -83,7 +83,7 @@ chatroom.controller('chatCtrl', [
 
         var tryLogin = function(name , pass){
             //todo: store session id in cookie
-            $q.when($http.post('/api/security/userlogin', {name : name, password: pass}))
+            rest.userLogin({name : name, password: pass})
                 .then(function(res){
                     if(res && res.data && res.data.login === true){
                         SaveLoginInfo(res.data.userId, name, pass);
@@ -91,7 +91,7 @@ chatroom.controller('chatCtrl', [
                     } else if(res && res.data && res.data.overMaxUsers === true){
                         return {overMaxUsers: true};
                     } else {
-                        return $q.when($http.post('/api/users', {name : name, password: pass, online_state: 1, role: 0}));
+                        return rest.createUser({name : name, password: pass, online_state: 1, role: 0});
                     }
                 })
                 .then(function(res){
@@ -120,7 +120,7 @@ chatroom.controller('chatCtrl', [
         };
 
         $scope.logout = function(){
-            $q.when($http.post('/api/security/userlogout', {name : $scope.me.name, password: $scope.me.password}))
+            rest.userLogout({name : $scope.me.name, password: $scope.me.password})
                 .then(function(){
 
                     for(var i = 0, l = $scope.users.length; i < l; i ++) {
@@ -142,7 +142,7 @@ chatroom.controller('chatCtrl', [
         $scope.send = function() {
             if($scope.inputMessage !== '') {
                 var datetime = new Date().toLocaleString();
-                $q.when($http.post('/api/messages', {from_id : $scope.me.userId, message : $scope.inputMessage || ' ', date : datetime}))
+                rest.sendMessage({from_id : $scope.me.userId, message : $scope.inputMessage || ' ', date : datetime})
                     .then(function(res){
                         $scope.inputMessage = '';
                         if($scope.socket) {

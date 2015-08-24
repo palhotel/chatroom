@@ -1,9 +1,9 @@
 chatroom.controller('whiteboardCtrl', [
     '$scope',
-    '$http',
     '$q',
     'socketService',
-    function($scope, $http, $q, socketService){
+    'rest',
+    function($scope, $q, socketService, rest){
         $scope.colors = [
             {name: 'red', style: 'red-box'},
             {name : '#00FF00', style: 'green-box'},
@@ -18,7 +18,7 @@ chatroom.controller('whiteboardCtrl', [
         $scope.pic = null;
 
         var updatePic = function(){
-            $q.when($http.get('/api/paint'))
+            rest.getPicture()
                 .then(function(res){
                     $scope.pic = res.data;
                 });
