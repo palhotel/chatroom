@@ -41,6 +41,7 @@ chatroom.directive('draw', [
             scope.$watch('brush', function(newVal){
                 if(newVal && newVal.hasOwnProperty('strokeStyle') && newVal.hasOwnProperty('lineWidth')){
                     ctx.strokeStyle = newVal.strokeStyle;
+                    $('.color-box').css('background', ctx.strokeStyle);
                     ctx.lineWidth = newVal.lineWidth;
                 }
             }, true);
