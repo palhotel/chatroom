@@ -4,5 +4,4 @@ node_js:
 before_install:
   - "npm install"
   - "echo 'data:image/png;base64,' > data/img.text"
-  - "node setup.js"
 

@@ -33,7 +33,7 @@
     "node": ">= 0.10.0"
   },
   "scripts": {
-    "start": "grunt production && node setup.js && node server.js",
+    "start": "grunt production && node server.js",
     "test": "karma start test/karma.conf.js"
   },
   "maintainers": [
