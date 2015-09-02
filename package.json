@@ -8,6 +8,7 @@
   ],
   "devDependencies": {
     "body-parser": "^1.13.1",
+    "cloudinary": "^1.2.4",
     "express": ">3.0.0",
     "grunt": "^0.4.5",
     "grunt-contrib-concat": "^0.5.1",
