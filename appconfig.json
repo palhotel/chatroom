@@ -2,6 +2,8 @@
   "PORT": 8000,
   "PROTOCOL": "http://",
   "HOST": "localhost",
-  "IMG_FILE": "data/img.text"
+  "IMG_FILE": "data/img.text",
+  "MAX_USERS": 25,
+  "MAX_MESSAGES": 100
 }
 

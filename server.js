@@ -34,15 +34,16 @@ app.use(multer()); // for parsing multipart/form-data
 var server = app.listen(CONFIG.PORT);
 
 require('./backend/setup')(SQL_CONFIG, CONFIG, fs, sqlite3, logger);
-var resources = require('./backend/resources')(fs, sqlite3, SQL_CONFIG, CONFIG, logger);
+var chatService = require('./backend/chatService')(fs, sqlite3, SQL_CONFIG, CONFIG, logger);
+var resources = require('./backend/resources')(chatService, CONFIG, logger);
 require('./backend/routes')(app, resources);
-require('./backend/socketService')(socketIO, logger, resources, server);
+require('./backend/socketService')(socketIO, logger, resources, server, chatService);
 
 global.appRuntime = {onlineUserCount : 0};
 
 setInterval(function(){
-	resources.local.clearOldMessages();
-	resources.local.savePaintToFile();
+	chatService.clearOldMessages();
+	chatService.savePaintToFile();
 }, 5000);
 
 logger.info('Server is running at 127.0.0.1 with port:' + CONFIG.PORT);
