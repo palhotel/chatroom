@@ -11,6 +11,7 @@ var path = require('path');
 var less = require('less');
 var socketIO = require('socket.io');
 var sqlite3 = require('sqlite3').verbose();
+var cloudinary = require('./backend/cloudinary')(CONFIG);
 
 var logs = require('./backend/logger');
 var logger = logs.logger;
