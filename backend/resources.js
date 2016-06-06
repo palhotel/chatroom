@@ -1,6 +1,6 @@
 //restful api
 var Q = require('q');
-function resources(chatService, config, logger) {
+function resources(chatService, config, logger, Base64) {
 
 
 	var getAllUsers = function (req, res) {
@@ -18,13 +18,18 @@ function resources(chatService, config, logger) {
 		if (global.appRuntime.onlineUserCount >= config.MAX_USERS) {
 			res.send({login: false, overMaxUsers: true});
 		} else {
-			console.log(req.body);
-			chatService.getMatchUser(req.body.name, req.body.password)
+			var auth = req.headers.authorization;
+			var text = Base64.decode(auth.split('Basic ')[1]);
+			var nameAndPass = text.split(':');
+			chatService.getMatchUser(nameAndPass[0], nameAndPass[1].replace(config.SALT, ""))
 				.then(function(data){
+					res.sendStatus(200);
 					res.send(data);
+
 				})
 				.catch(function(e){
 					logger.error(e);
+					res.sendStatus(403);
 				})
 				.done();
 		}
@@ -76,6 +81,7 @@ function resources(chatService, config, logger) {
 	};
 
 	var addMessage = function (req, res) {
+		logger.error("cetc#:", req, req.body);
 		chatService.addMessage(req.body)
 			.then(function(data){
 				res.send(data);

@@ -3,7 +3,7 @@ function routes(app, resources){
     app.get('/api/users/:id', resources.getUserById);
     app.post('/api/users', resources.addUser);
 
-    app.post('/api/security/userlogin', resources.getMatchUser);
+    app.head('/api/security/userlogin', resources.getMatchUser);
     app.post('/api/security/userlogout', resources.userLogOut);
 
     app.get('/api/messages', resources.getMessages);

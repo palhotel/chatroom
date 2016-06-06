@@ -30,7 +30,7 @@ function socketService(socketIO, logger, resources, server, chatService){
         });
 
         socket.on('user:save-paint', function(data){
-            resources.local.savePaintToMemory(data);
+            chatService.savePaintToMemory(data);
             io.emit('server:someone-paint');
         })
     });

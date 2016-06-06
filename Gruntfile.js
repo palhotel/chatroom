@@ -8,7 +8,7 @@ module.exports = function(grunt){
         src_less: 'src/less/*.less',
 
         copy: {
-            build: {expand: true, cwd: 'src/', src: ['index.html', 'images/loading.gif', 'favicon.ico'], dest: 'build/', filter: 'isFile'}
+            build: {expand: true, cwd: 'src/', src: ['index.html', 'images/loading.gif', 'favicon.ico', 'base64.js'], dest: 'build/', filter: 'isFile'}
         },
         uglify: {
             options: {
@@ -21,7 +21,7 @@ module.exports = function(grunt){
             }
         },
         jshint: {
-            files: '<%= src_js %>',
+            files: ['src/app.js', 'src/*/*.js'],
             options: {
                 jshintrc: '.jshintrc'
             }

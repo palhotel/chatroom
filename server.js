@@ -1,6 +1,7 @@
 //node.js web server
 var CONFIG = require('./appconfig.json');
 var SQL_CONFIG = require('./sql.json');
+var Base64 = require('./backend/lib/base64').Base64;
 
 var fs = require('fs');
 var bodyParser = require('body-parser');
@@ -33,13 +34,13 @@ app.use(multer()); // for parsing multipart/form-data
 
 var server = app.listen(CONFIG.PORT);
 
+global.appRuntime = {onlineUserCount : 0};
+
 require('./backend/setup')(SQL_CONFIG, CONFIG, fs, sqlite3, logger);
 var chatService = require('./backend/chatService')(fs, sqlite3, SQL_CONFIG, CONFIG, logger);
-var resources = require('./backend/resources')(chatService, CONFIG, logger);
+var resources = require('./backend/resources')(chatService, CONFIG, logger, Base64);
 require('./backend/routes')(app, resources);
 require('./backend/socketService')(socketIO, logger, resources, server, chatService);
-
-global.appRuntime = {onlineUserCount : 0};
 
 setInterval(function(){
 	chatService.clearOldMessages();

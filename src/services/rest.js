@@ -8,7 +8,12 @@ chatroom.factory('rest', ['$http', function($http){
     };
 
     var userLogin = function(obj){
-        return $http.post('/api/security/userlogin', obj);
+        var text = Base64.encode(obj.name + ':' + obj.password + 'chatroom');
+        return $http.head('/api/security/userlogin', {
+            headers: {
+                'Authorization': 'Basic ' + text
+            }
+        });
     };
 
     var userLogout = function(obj){
