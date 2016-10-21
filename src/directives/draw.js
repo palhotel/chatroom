@@ -1,4 +1,4 @@
-chatroom.directive('draw', [
+module.exports = [
     'socketService',
     '$http',
     function(socketService){
@@ -86,4 +86,4 @@ chatroom.directive('draw', [
             });
         }
     };
-}]);
+}];

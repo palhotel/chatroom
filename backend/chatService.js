@@ -44,6 +44,7 @@ function chatService(fs, sqlite3, sqlConfig, config, logger){
 			.from('users')
 			.field('count(*)', 'count')
 			.field('id')
+			.field('name')
 			.where(' name =? and password =? ', name, password)
 			.toString();
 
@@ -62,7 +63,7 @@ function chatService(fs, sqlite3, sqlConfig, config, logger){
 				runQuery(sqlUpdate);
 			}
 			if (data[0].count > 0) {
-				defer.resolve({login: true, userId: data[0].id});
+				defer.resolve({login: true, userId: data[0].id, userName: data[0].name});
 			} else {
 				defer.resolve({login: false})
 			}

@@ -1,5 +1,5 @@
 //author: https://github.com/buberdds/angular-bootstrap-colorpicker
-chatroom.directive('colorpicker', ['$document', '$compile', 'Color', 'Slider', 'Helper', function ($document, $compile, Color, Slider, Helper) {
+module.exports = ['$document', '$compile', 'colorService', 'Slider', 'colorHelper', function ($document, $compile, Color, Slider, Helper) {
     'use strict';
     return {
         require: '?ngModel',
@@ -308,4 +308,4 @@ chatroom.directive('colorpicker', ['$document', '$compile', 'Color', 'Slider', '
 
         }
     };
-}]);
+}];

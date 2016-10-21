@@ -23,9 +23,8 @@ function resources(chatService, config, logger, Base64) {
 			var nameAndPass = text.split(':');
 			chatService.getMatchUser(nameAndPass[0], nameAndPass[1].replace(config.SALT, ""))
 				.then(function(data){
-					res.sendStatus(200);
-					res.send(data);
-
+					data.token = auth;
+					res.status(200).send(data);
 				})
 				.catch(function(e){
 					logger.error(e);
