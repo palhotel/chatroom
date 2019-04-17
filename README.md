@@ -4,7 +4,7 @@ A chat room based on a Node.JS server, the Frontend should be angularJS and HTML
 [![Build Status](https://travis-ci.org/palhotel/chatroom.svg?branch=master)](https://travis-ci.org/palhotel/chatroom)
 
 # Get start
-- First install the Node.JS
+- First install the Node.JS 9.11.2
 - Install python and Visual Studio on windows
 - using `npm install` to install dependencies
 - using `npm start` to start the server

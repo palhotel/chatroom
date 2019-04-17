@@ -80,7 +80,6 @@ function resources(chatService, config, logger, Base64) {
 	};
 
 	var addMessage = function (req, res) {
-		logger.error("cetc#:", req, req.body);
 		chatService.addMessage(req.body)
 			.then(function(data){
 				res.send(data);

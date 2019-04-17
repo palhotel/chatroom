@@ -1,3 +1,4 @@
+require('./less/index.less');
 var chatCtrl = require('./controllers/chatCtrl.js');
 var whiteboardCtrl = require('./controllers/whiteboardCtrl.js');
 var colorHelper = require('./services/colorHelper.js');
