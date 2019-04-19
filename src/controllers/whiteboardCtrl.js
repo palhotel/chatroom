@@ -1,4 +1,4 @@
-chatroom.controller('whiteboardCtrl', [
+module.exports = [
     '$scope',
     '$q',
     'socketService',
@@ -36,4 +36,4 @@ chatroom.controller('whiteboardCtrl', [
             $scope.brush.lineWidth = size;
         };
 
-    }]);
+    }];

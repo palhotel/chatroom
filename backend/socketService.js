@@ -1,5 +1,5 @@
 var socketIds = {};
-function socketService(socketIO, logger, resources, server){
+function socketService(socketIO, logger, resources, server, chatService){
     var io = socketIO();
     io.on('connection', function(socket){
         logger.info('a user connected, socket.id : ' + socket.id);
@@ -7,7 +7,7 @@ function socketService(socketIO, logger, resources, server){
         socket.on('disconnect', function(){
             logger.info('user disconnected, socket.id : ' + socket.id);
             if(socketIds[socket.id]) {
-                resources.serverCallLogOut(socketIds[socket.id]);
+                chatService.serverCallLogOut(socketIds[socket.id]);
                 socketIds[socket.id] = null;
                 global.appRuntime.onlineUserCount --;
                 io.emit('server:someone-logout');
@@ -30,7 +30,7 @@ function socketService(socketIO, logger, resources, server){
         });
 
         socket.on('user:save-paint', function(data){
-            resources.local.savePaintToMemory(data);
+            chatService.savePaintToMemory(data);
             io.emit('server:someone-paint');
         })
     });

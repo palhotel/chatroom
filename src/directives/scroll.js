@@ -1,4 +1,4 @@
-chatroom.directive('scroll', function(){
+module.exports = function(){
     return {
         restrict: 'A',
         scope:{
@@ -16,4 +16,4 @@ chatroom.directive('scroll', function(){
             });
         }
     };
-});
+};

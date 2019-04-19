@@ -1,4 +1,4 @@
-chatroom.directive('loading', function(){
+module.exports = function(){
     return {
         restrict: 'A',
         link: function(scope, elem){
@@ -12,4 +12,4 @@ chatroom.directive('loading', function(){
             });
         }
     };
-});
+};

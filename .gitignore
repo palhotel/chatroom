@@ -7,3 +7,6 @@ access.log*
 data/chat.db
 data/img.text
 npm-debug.log
+
+yarn.lock
+package-lock.json

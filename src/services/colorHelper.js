@@ -1,5 +1,5 @@
 //author: https://github.com/buberdds/angular-bootstrap-colorpicker
-chatroom.factory('Helper', function () {
+module.exports = function () {
     'use strict';
     return {
         closestSlider: function (elem) {
@@ -80,4 +80,4 @@ chatroom.factory('Helper', function () {
             }
         ]
     };
-});
+};
