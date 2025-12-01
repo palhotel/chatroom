@@ -1,5 +1,5 @@
 //author: https://github.com/buberdds/angular-bootstrap-colorpicker
-chatroom.factory('Slider', ['Helper', function (Helper) {
+module.exports = ['colorHelper', function (Helper) {
     'use strict';
     var
         slider = {
@@ -73,4 +73,4 @@ chatroom.factory('Slider', ['Helper', function (Helper) {
             slider.knob.left = left + 'px';
         }
     };
-}]);
+}];

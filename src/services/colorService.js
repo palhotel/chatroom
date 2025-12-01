@@ -1,5 +1,5 @@
 //author: https://github.com/buberdds/angular-bootstrap-colorpicker
-chatroom.factory('Color', ['Helper', function (Helper) {
+module.exports = ['colorHelper', function (Helper) {
     'use strict';
     return {
         value: {
@@ -18,7 +18,7 @@ chatroom.factory('Color', ['Helper', function (Helper) {
             return 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ',' + rgb.a + ')';
         },
         'hex': function () {
-            return  this.toHex();
+            return this.toHex();
         },
 
         // HSBtoRGB from RaphaelJS
@@ -31,9 +31,9 @@ chatroom.factory('Color', ['Helper', function (Helper) {
             V = Math.max(r, g, b);
             C = V - Math.min(r, g, b);
             H = (C === 0 ? null :
-                    V === r ? (g - b) / C :
-                        V === g ? (b - r) / C + 2 :
-                        (r - g) / C + 4
+                V === r ? (g - b) / C :
+                    V === g ? (b - r) / C + 2 :
+                    (r - g) / C + 4
             );
             H = ((H + 360) % 6) * 60 / 360;
             S = C === 0 ? 0 : C / V;
@@ -104,4 +104,4 @@ chatroom.factory('Color', ['Helper', function (Helper) {
             return '#' + ((1 << 24) | (parseInt(rgb.r, 10) << 16) | (parseInt(rgb.g, 10) << 8) | parseInt(rgb.b, 10)).toString(16).substr(1);
         }
     };
-}]);
+}];

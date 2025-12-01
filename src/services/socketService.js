@@ -1,7 +1,7 @@
-chatroom.factory('socketService', function(){
+module.exports = function(){
     var socketIo = io();
 
     return {
         io : socketIo
     };
-});
+};

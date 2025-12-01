@@ -1,4 +1,4 @@
-chatroom.factory('rest', ['$http', function($http){
+module.exports = ['$http', function($http){
     var getAllUsers = function(){
         return $http.get('/api/users');
     };
@@ -8,7 +8,19 @@ chatroom.factory('rest', ['$http', function($http){
     };
 
     var userLogin = function(obj){
-        return $http.post('/api/security/userlogin', obj);
+        var text;
+        if(obj.token){
+            text = obj.token;
+        } else {
+            text = Base64.encode(obj.name + ':' + obj.password + 'chatroom');
+        }
+        return $http({
+            method:'POST',
+            url:'/api/security/userlogin',
+            headers:{'Authorization': 'Basic ' + text
+            }
+        });
+
     };
 
     var userLogout = function(obj){
@@ -37,4 +49,4 @@ chatroom.factory('rest', ['$http', function($http){
         sendMessage : sendMessage,
         getPicture : getPicture
     };
-}]);
+}];

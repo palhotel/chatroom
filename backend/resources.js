@@ -1,225 +1,126 @@
 //restful api
-var MAX_USERS = 25;
-var MAX_MESSAGES = 100;
-var sqlBuilder = require('squel');
-var uuid = require('uuid');
-var cachePaint = {};
+var Q = require('q');
+function resources(chatService, config, logger, Base64) {
 
-function resources(fs, sqlite3, sqlConfig, config, logger) {
-	var dataPath = sqlConfig.PATH;
-	var runQuery = function (sql, callback) {
-		var db;
-		try {
-			db = new sqlite3.Database(dataPath);
-			db.all(sql, callback);
-			db.close();
-		} catch (e) {
-			logger.error(e);
-		}
-	};
 
 	var getAllUsers = function (req, res) {
-		var sql = sqlBuilder
-			.select()
-			.from('users')
-			.field('id')
-			.field('name')
-			.field('role')
-			.field('online_state', 'online')
-			.toString();
-		runQuery(sql, function (err, data) {
-			if (err) {
-				logger.error(err);
-				res.writeHead(404);
-			} else {
+		chatService.getAllUsers()
+			.then(function(data){
 				res.send(data);
-			}
-		});
-
+			})
+			.catch(function(e){
+				throw err;
+			})
+			.done();
 	};
 
 	var getMatchUser = function (req, res) {
-		if (global.appRuntime.onlineUserCount >= MAX_USERS) {
+		if (global.appRuntime.onlineUserCount >= config.MAX_USERS) {
 			res.send({login: false, overMaxUsers: true});
 		} else {
-			var sql = sqlBuilder
-				.select()
-				.from('users')
-				.field('count(*)', 'count')
-				.field('id')
-				.where(' name =? and password =? ', req.body.name, req.body.password)
-				.toString();
-
-			runQuery(sql, function (err, data) {
-				if (err) {
-					logger.error((err));
-				}
-
-				if (data[0].hasOwnProperty('count') && data[0].count > 0) {
-					var sqlUpdate = sqlBuilder
-						.update()
-						.table('users')
-						.set('online_state', 1)
-						.where('id=? ', data[0].id)
-						.toString();
-					runQuery(sqlUpdate);
-				}
-				if (data[0].count > 0) {
-					res.send({login: true, userId: data[0].id});
-				} else {
-					res.send({login: false})
-				}
-			});
+			var auth = req.headers.authorization;
+			var text = Base64.decode(auth.split('Basic ')[1]);
+			var nameAndPass = text.split(':');
+			chatService.getMatchUser(nameAndPass[0], nameAndPass[1].replace(config.SALT, ""))
+				.then(function(data){
+					data.token = auth;
+					res.status(200).send(data);
+				})
+				.catch(function(e){
+					logger.error(e);
+					res.sendStatus(403);
+				})
+				.done();
 		}
 	};
 
 	var getUserById = function (req, res) {
-		var sql = sqlBuilder.select().from('users').where(' id =? ', req.params.id).toString();
-		runQuery(sql, function (err, data) {
-			err ? logger.error(err) : res.send(data);
-		});
+		chatService.getUserById(req.params.id)
+			.then(function(data){
+				res.send(data)
+			})
+			.catch(function(e){
+				logger.error(e)
+			})
+			.done();
 	};
 
 	var addUser = function (req, res) {
-		var userId = uuid.v4();
-		req.body['id'] = userId;
-		var sql = sqlBuilder
-			.insert()
-			.into('users')
-			.setFieldsRows([req.body])
-			.toString();
-		runQuery(sql, function (err) {
-			if (err) {
+		chatService.addUser(req.body)
+			.then(function(data){
+				res.send(data);
+			})
+			.catch(function(err){
 				res.sendStatus(500);
-			} else {
-				res.send({userId: userId});
-			}
-		});
-
+				logger.error(err);
+			})
+			.done();
 	};
 
 	var getMessageById = function (req, res) {
-		var sql = sqlBuilder.select().from('chats').where(' id =? ', req.params.id).toString();
-		runQuery(sql, function (err, data) {
-			err ? logger.error(err) : res.send(data);
-		});
+		chatService.getMessageById(req.params.id)
+			.then(function(data){
+				res.send(data);
+			})
+			.catch(function(err){
+				logger.error(err);
+			})
+			.done();
 	};
 
 	var getMessages = function (req, res) {
-		var sql = sqlBuilder
-			.select()
-			.from('chats')
-			.from('users')
-			.field('chats.id', 'id')
-			.field('chats.from_id', 'from')
-			.field('users.name', 'author')
-			.field('chats.message', 'message')
-			.field('chats.date', 'date')
-			.where('chats.from_id = users.id')
-			.toString();
-		runQuery(sql, function (err, data) {
-			err ? logger.error(err) : res.send(data);
-		});
+		chatService.getMessages()
+			.then(function(data){
+				res.send(data);
+			})
+			.catch(function(err){
+				logger.error(err);
+			})
+			.done();
 	};
 
 	var addMessage = function (req, res) {
-		var messageId = uuid.v4();
-		req.body['id'] = messageId;
-		var sql = sqlBuilder
-			.insert()
-			.into('chats')
-			.setFieldsRows([req.body])
-			.toString();
-		runQuery(sql, function (err) {
-			if (err) {
+		chatService.addMessage(req.body)
+			.then(function(data){
+				res.send(data);
+			})
+			.catch(function(err){
 				logger.error(err);
-			} else {
-				res.send({messageId: messageId})
-			}
-		});
+			})
+			.done();
 	};
 
 	var userLogOut = function (req, res) {
-		var sql = sqlBuilder
-			.update()
-			.table('users')
-			.set('online_state', 0)
-			.where(' name =? and password =? ', req.body.name, req.body.password)
-			.toString();
-
-		runQuery(sql, function (err, data) {
-			if (err) {
-				res.sendStatus(404);
-			} else {
+		chatService.userLogOut(req.body.name, req.body.password)
+			.then(function(){
 				res.sendStatus(204);
-			}
-		});
-	};
-
-	var serverCallLogOut = function (userId) {
-		//todo: move to dao layer
-		var sql = sqlBuilder
-			.update()
-			.table('users')
-			.set('online_state', 0)
-			.where(' id =? ', userId)
-			.toString();
-		runQuery(sql, function (err) {
-			if (err) {
-				logger.error('Got error at serverSideCallLogOut :' + err);
-			}
-		});
-	};
-
-	var clearOldMessages = function () {
-		var sql = 'select count(*) as count from chats; ';
-		runQuery(sql, function (err, data) {
-			if (data && data[0].hasOwnProperty('count') && data[0].count > MAX_MESSAGES) {
-				var delSql = 'delete from chats where id in (select id from chats order by date limit '
-					+ (data[0].count - MAX_MESSAGES) + '); ';
-				runQuery(delSql, function (err) {
-					if (err) {
-						logger.error('Got error at clearOldMessages :' + err);
-					}
-				});
-			}
-		});
+			})
+			.catch(function(err){
+				logger.error(err);
+				res.sendStatus(404);
+			})
+			.done();
 	};
 
 	var getPaint = function (req, res) {
-		var data;
-		if (cachePaint.data) {
-			data = cachePaint.data;
-		} else {
-			data = fs.readFileSync(config.IMG_FILE);
-		}
-		res.send(data);
-	};
-
-	var savePaintToFile = function () {
-		if(cachePaint.data){
-			fs.writeFileSync(config.IMG_FILE, cachePaint.data);
-		}
+		chatService.getPaint()
+			.then(function(data){
+				res.send(data);
+			})
+			.catch(function(err){
+				logger.error(err);
+			})
+			.done();
 	};
 
 	var savePaint = function (req, res) {
-		savePaintToMemory(req.body.pic);
+		chatService.savePaintToMemory(req.body.pic);
 		res.sendStatus(200);
 	};
 
-	var savePaintToMemory = function(data){
-		cachePaint.data = data;
-	};
-
 	return {
-		local : {
-			savePaintToMemory : savePaintToMemory,
-			savePaintToFile : savePaintToFile,
-			clearOldMessages: clearOldMessages
-		},
 		savePaint: savePaint,
 		getPaint: getPaint,
-		serverCallLogOut: serverCallLogOut,
 		userLogOut: userLogOut,
 		addMessage: addMessage,
 		getMessages: getMessages,

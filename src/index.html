@@ -8,11 +8,10 @@
 	<title ng-bind="title"></title>
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css"/>
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/emojione/1.5.0/assets/css/emojione.min.css"/>
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css"/>
 
 	<!--<link rel="stylesheet" type="text/css" href="vendors/bootstrap.css"/>-->
 	<!--<link rel="stylesheet" href="vendors/emojione.min.css"/>-->
-
-	<link rel="stylesheet" type="text/css" href="PalChatRoom.css"/>
 </head>
 
 
@@ -20,7 +19,7 @@
 <div class="main-wrapper">
 	<header class="header container-fluid">
 		<div class="row">
-			<div class="col-sm-6 col-xs-12 h1">Welcome  {{me.name === 'Me' ? '' : ' : ' + me.name}}</div>
+			<div class="col-sm-6 col-xs-12 h1"><i class="glyphicon glyphicon-flag"></i>Welcome  {{me.name === 'Me' ? '' : ' : ' + me.name}}</div>
 			<div class="col-sm-6 col-xs-12 login-input" ng-hide="alreadyLogin">
 				<div>
 					<label><span>Name</span><input class="form-control" ng-model="inputName" type="text"/></label>
@@ -31,22 +30,25 @@
 		</div>
 	</header>
 
-	<div class="main container" ng-class="{'move-to-right' : wantDraw === true}">
+	<div class="main container-fluid" ng-class="{'move-to-right' : wantDraw === true}">
 		<div class="left" x-scroll messages="chats">
 			<div class="messages" ng-repeat="chat in chats">
 				<p class="name"><span class="date">{{chat.date}}</span><span class="author">{{chat.author}}</span></p>
 				<p class="content" ng-bind-html="shortnameToImage(chat.message)"></p>
 			</div>
 		</div>
-		<div class="right"><p class="user-list" ng-repeat="user in users">{{user.name}}</p></div>
-		<div ng-show="alreadyLogin === true" class="bottom">
+		<div class="right hidden-xs hidden-sm">
+			<p class="user-list" ng-repeat="user in users">{{user.name}}</p>
+		</div>
+		<div ng-show="alreadyLogin === true" class="bottom hidden-xs hidden-sm">
 			<button class="draw-btton btn btn-lg btn-sm btn-block" ng-click="switchBoard()">&gt;&gt;</button>
 			<textarea class="input-text form-control" placeholder="press Ctrl + enter send message!" ng-model="inputMessage" ng-keydown="keyDownHandler($event)" ng-keyup="keyUpHandler($event)"></textarea>
+			<input class="input-text form-control visible-xs visible-sm" placeholder="press Ctrl + enter send message!" ng-model="inputMessage" ng-keydown="keyDownHandler($event)" ng-keyup="keyUpHandler($event)"/>
 			<button class="send-button btn btn-lg btn-primary btn-block" ng-click="send()">Send</button>
 		</div>
 	</div>
 
-	<footer class="footer container-fluid">
+	<footer class="footer container-fluid visible-md visible-lg">
 		<p class="state" ng-bind = "statusMessage"></p>
 		<button ng-show="alreadyLogin" class="btn btn-lg btn-default" ng-click="logout()">logout</button>
 	</footer>
@@ -76,6 +78,7 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.4/angular-animate.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.13.3/ui-bootstrap-tpls.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/emojione/1.5.0/lib/js/emojione.min.js"></script>
+<script src="base64.js"></script>
 
 <!--<script src="vendors/jquery.js"></script>-->
 <!--<script src="vendors/socket.io.js"></script>-->
@@ -83,9 +86,6 @@
 <!--<script src="vendors/angular-cookies.js"></script>-->
 <!--<script src="vendors/angular-sanitize.js"></script>-->
 <!--<script src="vendors/emojione.min.js"></script>-->
-
-<script src="PalChatRoom.js"></script>
-
-
+<!--<script src="vendors/base64.js"></script>-->
 </body>
 </html>
