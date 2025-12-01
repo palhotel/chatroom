@@ -31,29 +31,25 @@ jobs:
         with:
           node-version: 18
 
-      # 3. Install Grunt CLI globally
-      - name: Install Grunt CLI
-        run: sudo npm install -g grunt-cli
-
-      # 4. Install dependencies
+      # 3. Install dependencies
       - name: Install dependencies
         run: npm install
 
-      # 5. Build frontend assets
+      # 4. Build frontend assets
       - name: Build project
         run: grunt production
 
-      # 6. Setup Pages deployment
+      # 5. Setup Pages deployment
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      # 7. Upload built files (假设输出目录为 dist/)
+      # 6. Upload built files (假设输出目录为 dist/)
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'dist'
+          path: 'build'
 
-      # 8. Deploy to GitHub Pages
+      # 7. Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
