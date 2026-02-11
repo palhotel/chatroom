@@ -1,91 +1,79 @@
 <!DOCTYPE html>
-<html ng-app="chatroom" ng-controller="chatCtrl">
-<head lang="en">
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
-	<title ng-bind="title"></title>
-	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css"/>
-	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/emojione/1.5.0/assets/css/emojione.min.css"/>
-
-	<!--<link rel="stylesheet" type="text/css" href="vendors/bootstrap.css"/>-->
-	<!--<link rel="stylesheet" href="vendors/emojione.min.css"/>-->
-
-	<link rel="stylesheet" type="text/css" href="PalChatRoom.css"/>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PalChatRoom · Vue 3</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="PalChatRoom.css">
 </head>
+<body>
+<div id="app" class="app-shell">
+    <header class="container py-4">
+        <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+            <div>
+                <h1 class="h3 mb-1">PalChatRoom <span class="text-primary">Vue 3</span></h1>
+                <p class="text-secondary mb-0">{{ statusMessage }}</p>
+            </div>
+            <div v-if="!alreadyLogin" class="login-card card shadow-sm">
+                <div class="card-body d-flex flex-column flex-md-row gap-2">
+                    <input v-model.trim="inputName" class="form-control" placeholder="用户名" @keyup.enter="login">
+                    <input v-model="inputPass" class="form-control" type="password" placeholder="密码" @keyup.enter="login">
+                    <button class="btn btn-primary text-nowrap" @click="login">登录</button>
+                </div>
+            </div>
+            <div v-else class="d-flex gap-2 align-items-center">
+                <span class="badge text-bg-success">在线</span>
+                <strong>{{ me.name }}</strong>
+                <button class="btn btn-outline-danger btn-sm" @click="logout">退出</button>
+            </div>
+        </div>
+    </header>
 
+    <main class="container pb-4">
+        <div class="row g-3">
+            <section class="col-lg-9">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white fw-semibold">聊天消息</div>
+                    <div class="card-body message-panel" ref="messagePanel">
+                        <article v-for="chat in chats" :key="chat.id" class="message-item">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <strong>{{ chat.author }}</strong>
+                                <small class="text-secondary">{{ formatDate(chat.date) }}</small>
+                            </div>
+                            <p class="mb-0 mt-2">{{ chat.message }}</p>
+                        </article>
+                        <p v-if="!chats.length" class="text-secondary mb-0">暂无消息，快来发一条吧。</p>
+                    </div>
+                </div>
+            </section>
 
-<body x-loading>
-<div class="main-wrapper">
-	<header class="header container-fluid">
-		<div class="row">
-			<div class="col-sm-6 col-xs-12 h1">Welcome  {{me.name === 'Me' ? '' : ' : ' + me.name}}</div>
-			<div class="col-sm-6 col-xs-12 login-input" ng-hide="alreadyLogin">
-				<div>
-					<label><span>Name</span><input class="form-control" ng-model="inputName" type="text"/></label>
-					<label><span>Password</span><input class="form-control" ng-model="inputPass" type="password"/></label>
-					<label><button class="btn btn-lg btn-primary btn-block" ng-click="login()">Login</button></label>
-				</div>
-			</div>
-		</div>
-	</header>
+            <aside class="col-lg-3">
+                <div class="card shadow-sm h-100">
+                    <div class="card-header bg-white fw-semibold">在线用户</div>
+                    <ul class="list-group list-group-flush user-list">
+                        <li class="list-group-item d-flex justify-content-between" v-for="user in onlineUsers" :key="user.id">
+                            {{ user.name }}
+                            <span class="badge rounded-pill text-bg-success">online</span>
+                        </li>
+                        <li v-if="!onlineUsers.length" class="list-group-item text-secondary">当前无在线用户</li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
 
-	<div class="main container" ng-class="{'move-to-right' : wantDraw === true}">
-		<div class="left" x-scroll messages="chats">
-			<div class="messages" ng-repeat="chat in chats">
-				<p class="name"><span class="date">{{chat.date}}</span><span class="author">{{chat.author}}</span></p>
-				<p class="content" ng-bind-html="shortnameToImage(chat.message)"></p>
-			</div>
-		</div>
-		<div class="right"><p class="user-list" ng-repeat="user in users">{{user.name}}</p></div>
-		<div ng-show="alreadyLogin === true" class="bottom">
-			<button class="draw-btton btn btn-lg btn-sm btn-block" ng-click="switchBoard()">&gt;&gt;</button>
-			<textarea class="input-text form-control" placeholder="press Ctrl + enter send message!" ng-model="inputMessage" ng-keydown="keyDownHandler($event)" ng-keyup="keyUpHandler($event)"></textarea>
-			<button class="send-button btn btn-lg btn-primary btn-block" ng-click="send()">Send</button>
-		</div>
-	</div>
-
-	<footer class="footer container-fluid">
-		<p class="state" ng-bind = "statusMessage"></p>
-		<button ng-show="alreadyLogin" class="btn btn-lg btn-default" ng-click="logout()">logout</button>
-	</footer>
-
-	<div ng-show="wantDraw" class="whiteboard" ng-controller="whiteboardCtrl">
-		<div class="tool-box">
-			<button type="button" class="color-box btn btn-sm" colorpicker ng-model="brush.strokeStyle">
-				<i class="glyphicon glyphicon-pushpin" style="color:#FFFFFF;"></i>
-			</button>
-			<button type="button" class="size-box btn btn-sm">
-				<input type="number" ng-model="brush.lineWidth">
-				<!--<i class="glyphicon glyphicon-tint"></i>-->
-			</button>
-		</div>
-		<canvas x-draw data-brush="brush" width="400px" height="300px" data-pic="pic" class="draw-canvas"></canvas>
-	</div>
+        <div class="card shadow-sm mt-3" v-if="alreadyLogin">
+            <div class="card-body d-flex flex-column flex-md-row gap-2">
+                <textarea class="form-control" rows="2" placeholder="Ctrl + Enter 发送消息" v-model="inputMessage" @keydown="keyDownHandler"></textarea>
+                <button class="btn btn-primary send-btn" @click="send">发送</button>
+            </div>
+        </div>
+    </main>
 </div>
-<div class="loading-div">
-</div>
 
-
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.1/angular.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.1/angular-cookies.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.1/angular-sanitize.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.4/angular-animate.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.13.3/ui-bootstrap-tpls.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/emojione/1.5.0/lib/js/emojione.min.js"></script>
-
-<!--<script src="vendors/jquery.js"></script>-->
-<!--<script src="vendors/socket.io.js"></script>-->
-<!--<script src="vendors/angular.js"></script>-->
-<!--<script src="vendors/angular-cookies.js"></script>-->
-<!--<script src="vendors/angular-sanitize.js"></script>-->
-<!--<script src="vendors/emojione.min.js"></script>-->
-
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
 <script src="PalChatRoom.js"></script>
-
-
 </body>
 </html>
