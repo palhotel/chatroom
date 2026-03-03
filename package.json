@@ -8,6 +8,7 @@
   ],
   "devDependencies": {
     "body-parser": "^1.13.1",
+    "cloudinary": "^1.2.4",
     "express": ">3.0.0",
     "jasmine-core": "^2.3.4",
     "karma-jasmine": "^0.3.6",

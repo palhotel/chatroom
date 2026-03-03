@@ -3,5 +3,7 @@
   "PROTOCOL": "http://",
   "HOST": "localhost",
   "IMG_FILE": "data/img.text",
+  "CLOUDINARY_NAME": "likeada",
+  "CLOUDINARY_API_KEY": "982416951991523",
+  "CLOUDINARY_API_SECRET": "09qq4a3wV-cu82YI0_sRBQy_70c"
 }
-
